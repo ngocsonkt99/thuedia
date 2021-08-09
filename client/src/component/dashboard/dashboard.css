@@ -1,0 +1,53 @@
+.dashboard{
+    display: flex;
+
+    width: 100%;
+}
+.dashboard .phieuThue{
+
+    flex: 6;
+    border: 1px solid #bbb;
+    margin: 10px;
+    padding: 10px;
+    flex-direction: column;
+}
+.dashboard .chiTietThue{
+    flex: 6;
+    border: 1px solid #bbb;
+    margin: 10px;
+    padding: 10px;
+    flex-direction: column;
+}
+.dashboard .input{
+    display: flex;
+position: relative;
+width: 60%;
+margin-bottom: 10px;
+}
+.dashboard .input input{
+    width: 100%;
+    border: 1px solid #ccc;
+    outline: none;
+
+}
+.dashboard .input button{
+    border: 1px solid #ccc ;
+    position: absolute;
+    right: 0;
+    
+    
+   
+}
+.dashboard .date{
+    width: 60%;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.dashboard select{
+    width: 60%;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+}

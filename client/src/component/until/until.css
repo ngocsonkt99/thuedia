@@ -1,0 +1,49 @@
+.login{
+    position: absolute;
+    z-index: 9999;
+    top: 30%;
+    left: 40%;
+    width: 35%;
+    height: 250px;
+    background: #ccc;
+    border-radius: 5px;
+ 
+    
+}
+.login form{
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+.login form input{
+  
+    margin-bottom: 20px;
+    padding: 5px;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+}
+.login form input::placeholder{
+    color: #aaa;
+    padding: 5px;
+}
+.login form button{
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    font-weight: bold;
+    background: #fff;
+}
+.login form button:hover{
+    background: #999;
+}
+.login .cancel{
+    position: absolute;
+    top: 0;
+    right: 10px;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+}

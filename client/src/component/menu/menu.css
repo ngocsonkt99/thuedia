@@ -1,0 +1,62 @@
+.menu{
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #ccc;
+    position: relative;
+ 
+}
+.menu .menu-a-dash{
+  
+    text-decoration: none;
+    padding: 10px;
+    margin: 10px;
+    color: #777;
+}
+.menu a h3:hover{
+    background: white;
+    color: black;
+   
+   
+}
+.menu a h3:focus{
+    background: white;
+    color: black;
+}
+.menu .menu-product{
+    margin-top: 20px;
+    display: flex;
+    margin: 0;
+    flex-direction: column;
+}
+.menu .menu-product h3{
+   
+    padding: 10px;
+    margin: 10px;
+    color: #777;
+}
+.menu .menu-product ul li{
+    list-style: none;
+    margin-bottom: 30px;
+    font-size: 17px;
+}
+.menu-product ul li a{
+    text-decoration: none;
+    color: #777;
+}
+.menu-product ul li a:hover{
+    color: black;
+    background: white;
+    font-weight: bold;
+}
+.menu-product ul li a:focus{
+    color: black;
+    font-weight: bold;
+}
+.menu .logout-user{
+    position: absolute;
+    bottom: 10px;
+    padding: 10px;
+    font-size: 20px;
+    color: red
+}
