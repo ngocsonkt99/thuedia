@@ -24,6 +24,7 @@ const Controller = {
                disks.push(ds)
                cost=cost+ds.rentCost
                 ObId.push(ds._id)
+              
             }
             
             //const disks = await Disk.findOne({ diskId: disk })
