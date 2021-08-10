@@ -38,6 +38,7 @@ const Category ={
     get : async(req,res)=>{
        try {
            const category = await CategoryModel.find()
+        
             res.json({category})
        } catch (error) {
            return res.status(500).json({msg : error.message})

@@ -84,7 +84,7 @@ const DiskMager = () => {
                                     <th scope="row">{i}</th>
                                     <td>{item.diskId}</td>
                                     <td>{item.title}</td>
-                                    <td>{item.category}</td>
+                                    <td>{item.category.name}</td>
                                     <td>{item.copies}</td>
                                     <td>{item.rentCost}</td>
                                     <td><img src='pen-solid.svg' alt='' onClick={()=>handleUpdate(item._id)} /></td>

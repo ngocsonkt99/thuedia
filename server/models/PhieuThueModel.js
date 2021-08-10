@@ -3,17 +3,18 @@ const mongoose = require('mongoose')
 
 const phieuThueShema= new mongoose.Schema({
     phieuThueId:{
-        type:String
+        type:String,
+        
     },
     customer: {
         type : mongoose.Schema.Types.ObjectId,
         required: true,
-        ref:'customer'
+        ref:'Customer'
     },
     disk: [{
         type : mongoose.Schema.Types.ObjectId,
         required: true,
-        ref:'disk'
+        ref:'Disk'
     }],
     ngayLap:{
         type: Date,
@@ -35,6 +36,10 @@ const phieuThueShema= new mongoose.Schema({
             type : true,
             msg : "Đang thuê"
         }
+    },
+    ngayTra : {
+        type: Date,
+        
     }
    
 },{

@@ -8,7 +8,7 @@ const diskShema= new mongoose.Schema({
         type : String
     },
     category : {
-        type: String,
+        type:mongoose.Schema.Types.ObjectId, required:true, ref:'Categories'
     },
     copies : {
         type: Number,    
@@ -34,4 +34,4 @@ diskShema.pre('remove', function(next) {
     })
 })
 
-module.exports=mongoose.model('disk',diskShema)
+module.exports=mongoose.model('Disk',diskShema)

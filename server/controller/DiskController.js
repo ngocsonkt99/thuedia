@@ -50,7 +50,7 @@ const Controller = {
     },
     getDisk: async (req, res) => {
         try {
-            const disks = await Disks.find()
+            const disks = await Disks.find().populate('category').exec();
             res.json({ disks })
         } catch (err) {
             return res.status(500).json({ msg: err.message })

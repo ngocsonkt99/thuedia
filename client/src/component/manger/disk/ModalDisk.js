@@ -65,7 +65,7 @@ const ModalDisk = ({ cancel, diskUpdate, isUpdate }) => {
                 >
                         {
                             categories.map(item=>(
-                                <option value={item.name} key={item._id}>
+                                <option value={item._id} key={item._id}>
                                     {item.name}
                                 </option>
                             ))

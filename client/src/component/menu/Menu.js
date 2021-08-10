@@ -22,7 +22,7 @@ const Menu = () => {
                 {isLogged ? <>
                     <li><Link to='/disk'> <i className="fa fa-building-o" style={{ marginRight: '10px' }}/>Quản lý đĩa</Link></li>
                     
-                    <li><Link to='/user'>  <i className="fa fa-user" style={{ marginRight: '10px' }}/>Users Management</Link></li>
+                    {/* <li><Link to='/user'>  <i className="fa fa-user" style={{ marginRight: '10px' }}/>Users Management</Link></li> */}
                     </>
                     : ''}
                     <li><Link to='/customer'>  <RiCustomerService2Fill style={{ marginRight: '10px' }}/>Quản lý khách hàng</Link></li>
