@@ -7,6 +7,7 @@ import PhieuThue from './PhieuThue'
 import { GrView } from 'react-icons/gr'
 import { } from 'react-icons/'
 import TraDia from './TraDia'
+import Report from './Report'
 const DashBoard = () => {
     const context = useContext(GlobalContext)
     const [disks] = context.diskApi.disks
@@ -22,6 +23,8 @@ const DashBoard = () => {
     const [phiTre, setPhiTre] = useState(0)
     const [ObId, setObId] = useState([])
     const [isphitrem, setIsPhiTre] = useState(false)
+    const [rp, setRp] = useState([])
+    const [isRp, setIsRp] = useState(false)
     const [themPhiTre, setThemPhiTre] = useState({
         _id: "",
         phiTre: 0
@@ -34,8 +37,9 @@ const DashBoard = () => {
     })
 
 
-    
+
     const [isTraDia, setIsTraDia] = useState(false)
+    const [isNew,setIsNew]=useState(false)
     useEffect(() => {
         if (filterCus) setThemPhiTre({
             _id: filterCus._id,
@@ -57,17 +61,35 @@ const DashBoard = () => {
         try {
 
             const res = await axios.post('/phieuthue/add', { ...thongTin })
-            //    setThemPhiTre({
-            //        _id:filterCus._id,
-            //        phiTre:0
-            //    })
+            setIsNew(true)
+            setIsRp(true)
+            setRp(res.data.newPhieuThue)
+            if (isphitrem) {
+                setThemPhiTre({
+                    _id: filterCus._id,
+                    phiTre: 0
+                })
+                await axios.patch('/customer/themPhiTre', { ...themPhiTre })
+            }
+            else {
+                setThemPhiTre({
+                    _id: filterCus._id,
+                    phiTre: filterCus.phiTre
+                })
+                await axios.patch('/customer/themPhiTre', { ...themPhiTre })
+            }
 
-            await axios.patch('/customer/themPhiTre', { ...themPhiTre })
-            alert(res.data.msg)
+
+
+
+           // alert(res.data.msg)
             setcallback(!callback)
             setcallbackCus(!callbackCus)
             settotalDisk([])
             setPhiTre(0)
+            setFilterCus([])
+            setFilterDisk([])
+            setIsPhiTre(false)
         } catch (err) {
             alert(err.response.data.msg)
         }
@@ -156,22 +178,23 @@ const DashBoard = () => {
     }
 
 
-    const handleView = id => {
-        phieuthue.forEach(element => {
-            console.log(element)
-        });
 
-    }
-    const [showPhiTre,setShowPhiTre]=useState([])
-    const handleShowTraDia=(id)=>{
+    const [showPhiTre, setShowPhiTre] = useState([])
+    const handleShowTraDia = (id) => {
         setIsTraDia(!isTraDia)
 
         phieuthue.forEach(element => {
-            if(element._id===id) setShowPhiTre(element)
+            if (element._id === id) setShowPhiTre(element)
         });
     }
-
-   
+    
+    const handleView = (id) => {
+        setIsRp(!isRp)
+        phieuthue.forEach(element => {
+            if (element._id === id) setRp(element)
+        });
+    }
+    const close=()=>{setIsRp(false)}
     return (
         <>
             <h4 style={{
@@ -243,7 +266,7 @@ const DashBoard = () => {
 
                                                 padding: '5px'
                                             }}
-                                            onClick={()=>handleShowTraDia(item.id)}
+                                                onClick={() => handleShowTraDia(item.id)}
                                             >Trả đĩa</button> :
 
 
@@ -267,9 +290,10 @@ const DashBoard = () => {
                 </tbody>
             </table>
             {
-                isTraDia ?     <TraDia show={handleShowTraDia} phiTre={showPhiTre}/> :''
+                isTraDia ? <TraDia show={handleShowTraDia} phiTre={showPhiTre} /> : ''
             }
-        
+           {isRp ? <Report rp={rp} close={close} isNew={isNew}/> : ''}
+
         </>
     )
 }
