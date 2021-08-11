@@ -1,10 +1,13 @@
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../../GlobalContext'
+import Loading from '../until/Loading'
 
 const TraDia = ({ show, phiTre }) => {
     const [callback,setCallback]=useContext(GlobalContext).phieuthueApi.callback
+    const [callbackCus,setCallbackCus]=useContext(GlobalContext).customerApi.callback
     const [input, setInput] = useState('')
+    const [loading,setLoading]=useState(false)
     const handleonChange = (e) => {
         setInput(e.target.value)
     }
@@ -29,30 +32,32 @@ const TraDia = ({ show, phiTre }) => {
         setIsThanhToa(!isThanhToan)
         
     }
-    const handleSubmit= async ()=>{
-       
+    useEffect(()=>{
         if(isThanhToan) {
             setSp({
                 ngayTra: input,
                 _id: phiTre._id,
                 phiTre: 0
             })
-        const res=   await axios.patch('/phieuthue/traDia',{...sb})
-        alert(res.data.msg)
-
-           
+         
         }else{
             setSp({
                 ngayTra: input,
                 _id: phiTre._id,
                 phiTre: showPhi
             })
-            const res=   await axios.patch('/phieuthue/traDia',{...sb})
-            alert(res.data.msg)
-
         }
+    },[isThanhToan,input,phiTre,showPhi])
+    const handleSubmit= async ()=>{
+       setLoading(true)
+
+       const res=   await axios.patch('/phieuthue/traDia',{...sb})
+         alert(res.data.msg)
+    
+        setLoading(false)
       show()
       setCallback(!callback)
+      setCallbackCus(!callbackCus)
     }
 
 
@@ -77,7 +82,20 @@ const TraDia = ({ show, phiTre }) => {
             <button style={{ width: '100%', marginTop: '50px' }}
             onClick={()=>handleSubmit()}
             >Hoàn tất</button>
+             {loading ? 
+            <div style={{
+                position: 'absolute',
+                top: '30%',
+                left: '55%'
+            }}>
+                <Loading/>
+            </div>    
+            : ''
+        }
         </div>
+
+        
+        
     )
 }
 

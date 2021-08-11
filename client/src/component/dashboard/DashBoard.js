@@ -9,6 +9,7 @@ import { } from 'react-icons/'
 import TraDia from './TraDia'
 import Report from './Report'
 import PaginationReact from 'react-paginate'
+import Loading from '../until/Loading'
 const DashBoard = () => {
     const context = useContext(GlobalContext)
     const [disks] = context.diskApi.disks
@@ -29,6 +30,8 @@ const DashBoard = () => {
     const [isTraDia, setIsTraDia] = useState(false)
     const [isNew] = useState(false)
     const [numberPage, setNumberPage] = useState(0)
+    const [loading,setLoading]=useState(false)
+    const [isNewThue,setIsNewThue]=useState(false)
     const [phieuThueAll, setPhieuThueAll] = useState([
         {
             id: '',
@@ -42,7 +45,11 @@ const DashBoard = () => {
     ])
     const TotalItem = 5;
     const PostVisited = numberPage * TotalItem
-
+    const[newThue,setNewThue]=useState({
+        total: 0,
+        ngayTra: ''
+    }
+)
     const [inputSearch, setInputSearch] = useState('')
     const handleOnchangeInputSearch = (e) => {
         setInputSearch(e.target.value)
@@ -110,7 +117,7 @@ const DashBoard = () => {
     }, [filterDisk, filterCus, ObId, hanTra, phiTre])
     const handleThemPhieuThu = async () => {
 
-
+        setLoading(true)
         try {
 
             const res = await axios.post('/phieuthue/add', { ...thongTin })
@@ -132,19 +139,27 @@ const DashBoard = () => {
                     phiTre: filterCus.phiTre })
             }
 
+         setNewThue({
+             total: res.data.newPhieuThue.total,
+             ngayTra:res.data.newPhieuThue.hanTra
+         })
 
-
-
-            alert(res.data.msg)
+            setLoading(false)
+          //  alert(res.data.msg)
+          setIsNewThue(true)
             setcallback(!callback)
             setcallbackCus(!callbackCus)
             settotalDisk([])
             setPhiTre(0)
             setFilterCus([])
             setFilterDisk([])
+            setHanTra()
             setIsPhiTre(false)
+            setDia([])
+
         } catch (err) {
             alert(err.response.data.msg)
+            setLoading(false)
         }
 
     }
@@ -247,11 +262,11 @@ const DashBoard = () => {
             alert(err.response.data.msg)
         }
     }
-    const disPlayTable = phieuThueAll.slice(PostVisited, PostVisited + TotalItem).map((item, i) => (
+    const disPlayTable = phieuThueAll.slice(PostVisited, PostVisited + TotalItem).map((item,i) => (
         <>
             {
 
-                <tr key={i}>
+                <tr key={item.id}>
                     <th scope="row">{i}</th>
 
                     <td>{item.customer.name}</td>
@@ -382,7 +397,36 @@ const DashBoard = () => {
                 isTraDia ? <TraDia show={handleShowTraDia} phiTre={showPhiTre} /> : ''
             }
             {isRp ? <Report rp={rp} close={close} isNew={isNew} /> : ''}
-
+            {loading ? 
+            <div style={{
+                position: 'absolute',
+                top: '30%',
+                left: '55%'
+            }}>
+                <Loading/>
+            </div>    
+            : ''
+        }
+        {
+            isNewThue ?
+        
+        <div  style={{
+            position: 'absolute',
+            top: '30%',
+            left:'40%',
+            background: '#aaa',
+            width: '40%',
+            height: '150px',
+            padding:'10px'
+        }}>
+            <h4 style={{
+                color: 'red',
+                textAlign: 'center'
+            }}>Thêm thành công</h4>
+            <h5>Tổng tiền : {newThue.total} </h5>
+            <h5>Ngày trả : {new Date(newThue.ngayTra).toLocaleDateString()}</h5>
+            <button style={{width: '100%'}} onClick={()=>setIsNewThue(false)}>Hoàn tất</button>
+        </div> : ''}
         </>
     )
 }

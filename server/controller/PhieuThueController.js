@@ -41,7 +41,7 @@ const Controller = {
           const newPhieu = await PhieuThues.findOne({phieuThueId }).populate('disk customer')
             res.json({
                 msg: 'Thêm phiếu thuê thành công',
-                newPhieuThue: newPhieu
+                newPhieuThue
             })
 
            

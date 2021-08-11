@@ -31,15 +31,7 @@ const ChiTietThue = ({ filterDiskHandle, filterDisk, handleOnchangeHantra, hanTr
                 <input type='date' placeholder='Hạn trả..' className='date' value={hanTra} onChange={handleOnchangeHantra} />
             </div>
             <div className='right' style={{flex: '3'}}>
-                {/* <select style={{width:'100%'}}>
-                    <option>Đĩa đã thêm</option>
-                    {
-                        dia.map((item)=>(
-                            
-                            <option>{item.diskId} - {item.title}</option>
-                        ))
-                    }
-                </select> */}
+              
                 <h5>Đĩa được chọn</h5>
                  {
                         dia.map((item,i)=>(
