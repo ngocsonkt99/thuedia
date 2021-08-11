@@ -9,13 +9,11 @@ const Controller = {
         try {
 
             const { customer, disk, hanTra ,phiTre} = req.body
-            if (!customer) return res.status(400).json({ msg: " Chưa nhập khách hàng" })
+            if (customer=== ' ') return res.status(400).json({ msg: " Chưa nhập khách hàng" })
             const randomId = Math.floor(Math.random() * 1000);
             const phieuThueId = 'PT' + randomId
             const customers = await Customers.findOne({ customerId: customer })
            // if(customers=[]) return res.status(400).json({msg : 'Không có Kh'})
-
-
             let disks =[];
             let cost=0;
             let ObId=[]
@@ -29,7 +27,7 @@ const Controller = {
             
             //const disks = await Disk.findOne({ diskId: disk })
           //  if (!disk) return res.status(400).json({ msg: " Chưa chọn đĩa" })
-          if(!hanTra) return res.status(400).json({ msg: "Chưa thêm ngày trả" })
+     
             const now = new Date()
             const han = new Date(hanTra)
             if(now > han) return res.status(400).json({msg : 'Hạn trả không được nhỏ hơn ngày hiện tại'})
@@ -39,14 +37,14 @@ const Controller = {
             const newPhieuThue = new PhieuThues({
                 phieuThueId, customer: customers._id, disk: ObId, ngayLap: now, hanTra: han, total: total
             })
-            await newPhieuThue.save()
-     
+           await newPhieuThue.save()
+          const newPhieu = await PhieuThues.findOne({phieuThueId }).populate('disk customer')
             res.json({
                 msg: 'Thêm phiếu thuê thành công',
-                newPhieuThue
+                newPhieuThue: newPhieu
             })
 
-
+           
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }
@@ -60,8 +58,12 @@ const Controller = {
     },
     deletePhieuThue: async (req, res) => {
         try {
-
-
+            
+            await PhieuThues.findByIdAndDelete(req.params.id)
+            res.json({
+                msg: "Đã xóa"
+            })
+            
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }

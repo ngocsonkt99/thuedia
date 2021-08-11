@@ -43,7 +43,7 @@ const Report = ({ rp, close, isNew }) => {
             {
                 isNew ? <button style={{ width: '100%', marginTop: '50px' }}
 
-                >Hoàn tất</button> : ''
+               onClick={()=>close()} >Hoàn tất</button> : ''
             }
           
         </div>

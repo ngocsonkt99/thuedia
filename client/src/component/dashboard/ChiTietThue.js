@@ -42,9 +42,9 @@ const ChiTietThue = ({ filterDiskHandle, filterDisk, handleOnchangeHantra, hanTr
                 </select> */}
                 <h5>Đĩa được chọn</h5>
                  {
-                        dia.map((item)=>(
+                        dia.map((item,i)=>(
                             
-                            <h6>{item.diskId} - {item.title}</h6>
+                            <h6 key={i}>{item.diskId} - {item.title}</h6>
                         ))
                     }
             </div>

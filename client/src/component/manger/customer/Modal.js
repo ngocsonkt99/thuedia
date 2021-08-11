@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useContext, useState } from 'react'
-import Customer from '../../../api/CustomerApi'
+
 import { GlobalContext } from '../../../GlobalContext'
 import ReportCustomer from './ReportCustomer'
 

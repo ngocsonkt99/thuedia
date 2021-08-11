@@ -8,6 +8,7 @@ import { GrView } from 'react-icons/gr'
 import { } from 'react-icons/'
 import TraDia from './TraDia'
 import Report from './Report'
+import PaginationReact from 'react-paginate'
 const DashBoard = () => {
     const context = useContext(GlobalContext)
     const [disks] = context.diskApi.disks
@@ -25,6 +26,54 @@ const DashBoard = () => {
     const [isphitrem, setIsPhiTre] = useState(false)
     const [rp, setRp] = useState([])
     const [isRp, setIsRp] = useState(false)
+    const [isTraDia, setIsTraDia] = useState(false)
+    const [isNew] = useState(false)
+    const [numberPage, setNumberPage] = useState(0)
+    const [phieuThueAll, setPhieuThueAll] = useState([
+        {
+            id: '',
+            customer: '',
+
+            ngayLap: '',
+            hanTra: '',
+            total: 0,
+            status: ''
+        }
+    ])
+    const TotalItem = 5;
+    const PostVisited = numberPage * TotalItem
+
+    const [inputSearch, setInputSearch] = useState('')
+    const handleOnchangeInputSearch = (e) => {
+        setInputSearch(e.target.value)
+    }
+    const onClickSearch = (value) => {
+        //  console.log(value)
+
+        if (value !== '') {
+            const data = []
+            phieuthue.forEach(element => {
+
+                if (element.customer.customerId === value) {
+                    data.push(
+                        {
+                            id: element._id,
+                            customer: element.customer,
+
+                            ngayLap: element.ngayLap,
+                            hanTra: element.hanTra,
+                            total: element.total,
+                            status: element.status
+                        }
+                    )
+
+                }
+            });
+            setPhieuThueAll(data)
+        } else setcallback(!callback)
+
+
+    }
     const [themPhiTre, setThemPhiTre] = useState({
         _id: "",
         phiTre: 0
@@ -38,15 +87,16 @@ const DashBoard = () => {
 
 
 
-    const [isTraDia, setIsTraDia] = useState(false)
-    const [isNew,setIsNew]=useState(false)
+
+
     useEffect(() => {
         if (filterCus) setThemPhiTre({
             _id: filterCus._id,
             phiTre: phiTre
         })
-    }, [filterCus])
-    const handleThemPhieuThu = async () => {
+    }, [filterCus, phiTre])
+
+    useEffect(() => {
         if (filterCus && filterDisk) {
             setThongTin({
                 customer: filterCus.customerId,
@@ -57,32 +107,35 @@ const DashBoard = () => {
             })
         }
 
+    }, [filterDisk, filterCus, ObId, hanTra, phiTre])
+    const handleThemPhieuThu = async () => {
+
 
         try {
 
             const res = await axios.post('/phieuthue/add', { ...thongTin })
-            setIsNew(true)
-            setIsRp(true)
-            setRp(res.data.newPhieuThue)
+
+
             if (isphitrem) {
                 setThemPhiTre({
                     _id: filterCus._id,
                     phiTre: 0
                 })
-                await axios.patch('/customer/themPhiTre', { ...themPhiTre })
+                await axios.patch('/customer/themPhiTre', {_id: filterCus._id,phiTre:0 })
             }
             else {
                 setThemPhiTre({
                     _id: filterCus._id,
                     phiTre: filterCus.phiTre
                 })
-                await axios.patch('/customer/themPhiTre', { ...themPhiTre })
+                await axios.patch('/customer/themPhiTre', {  _id: filterCus._id,
+                    phiTre: filterCus.phiTre })
             }
 
 
 
 
-           // alert(res.data.msg)
+            alert(res.data.msg)
             setcallback(!callback)
             setcallbackCus(!callbackCus)
             settotalDisk([])
@@ -96,17 +149,7 @@ const DashBoard = () => {
 
     }
 
-    const [phieuThueAll, setPhieuThueAll] = useState([
-        {
-            id: '',
-            customer: '',
 
-            ngayLap: '',
-            hanTra: '',
-            total: 0,
-            status: ''
-        }
-    ])
     const handleThanhToanPhiTre = () => {
         setPhiTre(filterCus.phiTre)
         setIsPhiTre(!isphitrem)
@@ -117,7 +160,7 @@ const DashBoard = () => {
     }
     useEffect(() => {
         const thue = [];
-        let kh = '';
+
         let dia = '';
         phieuthue.forEach(p => {
             disks.forEach(ds => {
@@ -136,7 +179,7 @@ const DashBoard = () => {
 
         });
         setPhieuThueAll(thue)
-    }, [phieuthue])
+    }, [phieuthue, disks])
 
 
 
@@ -187,14 +230,78 @@ const DashBoard = () => {
             if (element._id === id) setShowPhiTre(element)
         });
     }
-    
+
     const handleView = (id) => {
         setIsRp(!isRp)
         phieuthue.forEach(element => {
             if (element._id === id) setRp(element)
         });
     }
-    const close=()=>{setIsRp(false)}
+    const close = () => { setIsRp(false) }
+    const deletePhieuThue= async(id)=>{
+        try {
+            const res=await axios.delete(`/phieuthue/${id}`)
+            alert(res.data.msg)
+            setcallback(!callback)
+        } catch (err) {
+            alert(err.response.data.msg)
+        }
+    }
+    const disPlayTable = phieuThueAll.slice(PostVisited, PostVisited + TotalItem).map((item, i) => (
+        <>
+            {
+
+                <tr key={i}>
+                    <th scope="row">{i}</th>
+
+                    <td>{item.customer.name}</td>
+
+                    <td>{new Date(item.ngayLap).toLocaleDateString()}</td>
+                    <td>{new Date(item.hanTra).toLocaleDateString()}</td>
+                    <td>{item.total}</td>
+                    <td style={item.status.type ? { color: 'red' } : { color: 'green' }}>{item.status.msg}</td>
+                    <td onClick={() => handleView(item.id)}><GrView /></td>
+                    <td>
+                        {
+                            item.status.type ?
+
+                                <button style={{
+                                    borderRadius: '2px',
+
+                                    margin: 'auto',
+                                    display: 'flex',
+
+
+                                    padding: '5px'
+                                }}
+                                    onClick={() => handleShowTraDia(item.id)}
+                                >Trả đĩa</button> :
+
+
+                                <button style={{
+                                    borderRadius: '2px',
+
+                                    margin: 'auto',
+                                    display: 'flex',
+
+
+                                    padding: '5px'
+                                }}
+                                
+                                onClick={()=>deletePhieuThue(item.id)}>Xóa phiếu</button>
+
+                        }
+
+                    </td>
+                </tr>
+
+            }
+        </>
+    ))
+    const pageCount = Math.ceil(phieuThueAll.length / TotalItem);
+    const changePage = ({ selected }) => {
+        setNumberPage(selected)
+    }
     return (
         <>
             <h4 style={{
@@ -203,24 +310,52 @@ const DashBoard = () => {
                 letterSpacing: '1px',
                 textTransform: 'capitalize'
             }}>Phiếu thuê</h4>
+         
             <div className='dashboard'>
 
                 <PhieuThue filterCus={filterCustomer} customer={filterCus} isPhiTre={isphitrem} handleThanhToanPhiTre={handleThanhToanPhiTre} />
                 <ChiTietThue filterDiskHandle={filterDiskHandle} filterDisk={filterDisk} hanTra={hanTra} handleOnchangeHantra
                     ={handleOnchangeHantra} dia={dia} />
             </div>
-            <button
-                onClick={() => handleThemPhieuThu()}
-                style={{
-                    margin: '10px',
-                    outline: 'none',
-                    border: 'none',
-                    padding: '7px',
-                    background: "#aaa",
-                    borderRadius: '3px',
-                    color: 'whitesmoke',
-                    fontWeight: 'bold'
-                }}>Lập phiếu thuê</button>
+
+            <div className='pagination-dashboard'>
+                <button
+                    onClick={() => handleThemPhieuThu()}
+                    style={{
+                        margin: '10px',
+                        width: '200px',
+                        outline: 'none',
+                        border: '1px solid #aaa',
+
+
+                        borderRadius: '3px',
+                        color: 'black',
+                        fontWeight: 'bold'
+                    }}>Lập phiếu thuê</button>
+                       <div>
+                <img src='sync-alt-solid.svg' alt='' style={{
+                    width:'15px',
+                    marginTop: '50px'
+                }} onClick={()=>setcallback(!callback)}/>
+            </div>
+                <PaginationReact
+                    previousLabel={"Trở lại"}
+                    nextLabel={"Tiếp theo"}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={"paginationPosts"}
+                    previousLinkClassName={"previousBtn"}
+                    nextLinkClassName={"nextBttn"}
+                    disabledClassName={"paginationDisabled"}
+                    activeClassName={"paginationActivePosts"}
+
+                />
+                <div className='search'>
+                    <input placeholder='Id khách hàng' style={{ marginTop: '30px', width: '300px ' }} value={inputSearch} onChange={handleOnchangeInputSearch} />
+                    <button onClick={() => onClickSearch(inputSearch)} style={{ marginLeft: '10px' }}>Tìm</button>
+                </div>
+              
+            </div>
 
             <table className="table table-bordered">
                 <thead>
@@ -238,61 +373,15 @@ const DashBoard = () => {
                     </tr>
                 </thead>
                 <tbody>
+                    {disPlayTable}
 
-                    {
-
-                        phieuThueAll.map((item, i) => (
-
-                            <tr key={i}>
-                                <th scope="row">{i}</th>
-
-                                <td>{item.customer.name}</td>
-
-                                <td>{new Date(item.ngayLap).toLocaleDateString()}</td>
-                                <td>{new Date(item.hanTra).toLocaleDateString()}</td>
-                                <td>{item.total}</td>
-                                <td style={item.status.type ? { color: 'red' } : { color: 'green' }}>{item.status.msg}</td>
-                                <td onClick={() => handleView(item.id)}><GrView /></td>
-                                <td>
-                                    {
-                                        item.status.type ?
-
-                                            <button style={{
-                                                borderRadius: '2px',
-
-                                                margin: 'auto',
-                                                display: 'flex',
-
-
-                                                padding: '5px'
-                                            }}
-                                                onClick={() => handleShowTraDia(item.id)}
-                                            >Trả đĩa</button> :
-
-
-                                            <button style={{
-                                                borderRadius: '2px',
-
-                                                margin: 'auto',
-                                                display: 'flex',
-
-
-                                                padding: '5px'
-                                            }}>Xóa phiếu</button>
-
-                                    }
-
-                                </td>
-                            </tr>
-                        ))
-                    }
 
                 </tbody>
             </table>
             {
                 isTraDia ? <TraDia show={handleShowTraDia} phiTre={showPhiTre} /> : ''
             }
-           {isRp ? <Report rp={rp} close={close} isNew={isNew}/> : ''}
+            {isRp ? <Report rp={rp} close={close} isNew={isNew} /> : ''}
 
         </>
     )

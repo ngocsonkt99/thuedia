@@ -9,7 +9,7 @@ const TraDia = ({ show, phiTre }) => {
         setInput(e.target.value)
     }
     const [showPhi, setShowPhi] = useState(0)
-    const[thanhToanPhiTre,setThanhToanPhiTre]=useState(0)
+
     const[isThanhToan,setIsThanhToa]=useState(false)
     const [sb,setSp]=useState({
         ngayTra: '',
@@ -23,7 +23,7 @@ const TraDia = ({ show, phiTre }) => {
             if(tra<han) setShowPhi(0)
             else setShowPhi((tra-han)*1000)
         }
-    }, [input])
+    }, [input,phiTre])
     const handleThanhToan=()=>{
  
         setIsThanhToa(!isThanhToan)
