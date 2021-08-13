@@ -11,9 +11,7 @@ const ChiTietThue = ({ filterDiskHandle, filterDisk, handleOnchangeHantra, hanTr
         if (hanTra) setHan(new Date(hanTra).toLocaleDateString())
     }, [hanTra])
     return (<>
-      {/* <h6 style={{
-                textAlign: 'center'
-            }}>Chi tiết phiếu thuê</h6> */}
+ 
         <div className='chiTietThue' style={{ display: 'flex',justifyContent: 'space-around'}}>
           
             <div className='left' style={{flex: '9'}}>

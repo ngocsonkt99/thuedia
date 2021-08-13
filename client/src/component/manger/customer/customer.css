@@ -1,5 +1,8 @@
 .customer{
     position: relative;
+
+
+    animation: expand 1s ease forwards;
 }
 
 .add-customer{
@@ -66,4 +69,11 @@
 .modal-add form button:hover{
     background: #ccc;
     color: black;
+}
+.btn-phieuThue{
+
+    border: 1px solid #aaa;
+    background: transparent;
+    padding: 5px;
+    border-radius: 3px;
 }

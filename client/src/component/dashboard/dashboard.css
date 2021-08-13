@@ -1,8 +1,21 @@
+.page-main{
+    animation: expand 1s ease forwards;
+}
 .dashboard{
     display: flex;
 
     width: 100%;
+    transition: all 1s ease;
+   
 }
+@keyframes expand {
+    0% {
+      transform: translateX(1400px);
+    }
+    100% {
+      transform: translateX(0px);
+    }
+  }
 .dashboard .phieuThue{
 
     flex: 6;
@@ -75,4 +88,7 @@ margin-bottom: 10px;
 .paginationActivePosts a{
     color: white;
     background: #cccc
+}
+.dashboard button:hover{
+    background: #ccc;
 }

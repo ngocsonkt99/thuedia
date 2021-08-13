@@ -21,7 +21,8 @@ const PhieuThue = ({filterCus,customer, handleThanhToanPhiTre,isPhiTre}) => {
         <h6>Họ và tên :  <span style={{color: 'blue'}}>{customer.name}</span></h6>
         <h6>Phí trễ chưa thanh toán :  { isPhiTre ?
         <strike style={{color: 'red'}}>{customer.phiTre} Đ</strike> 
-        : <span style={{color: 'blue'}}>{customer.phiTre} Đ</span> }<button onClick={()=>handleThanhToanPhiTre()}
+        : <span style={{color: 'blue'}}>{customer.phiTre} Đ</span> }<button  className='btn-phieuThue'
+        onClick={()=>handleThanhToanPhiTre()}
             style={{marginLeft: '10px'}}
         >Thanh Toán</button></h6>
 

@@ -2,7 +2,7 @@
 const PhieuThues = require('../models/PhieuThueModel')
 const Customers = require('../models/Customer')
 const Disk = require('../models/DiskModel')
-const { findByIdAndUpdate } = require('../models/PhieuThueModel')
+
 
 const Controller = {
     addPhieuThue: async (req, res) => {
@@ -17,11 +17,13 @@ const Controller = {
             let disks =[];
             let cost=0;
             let ObId=[]
+            
             for(let i=0 ; i< disk.length;i++){
                const ds= await Disk.findOne({ diskId: disk[i] });
                disks.push(ds)
                cost=cost+ds.rentCost
                 ObId.push(ds._id)
+                
               
             }
             

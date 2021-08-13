@@ -2,17 +2,13 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { AiFillHome } from 'react-icons/ai'
 import './menu.css'
-import axios from 'axios'
+
 import {RiCustomerService2Fill} from'react-icons/ri'
 import { GlobalContext } from '../../GlobalContext'
 const Menu = () => {
     const context=useContext(GlobalContext)
     const [isLogged]=context.userApi.isLogged
-    const logoutUser=async()=>{
-        await axios.get('/user/logout')
-        localStorage.setItem('login',false)
-        window.location.href='/'
-    }
+  
     return (
         <div className='menu'>
             <Link to='/' className='menu-a-dash'><h3><AiFillHome style={{ marginRight: '20px' }} />Trang Chủ</h3></Link>
@@ -29,8 +25,12 @@ const Menu = () => {
                 </ul>
             </div>
             {
-                isLogged ?<div className='logout-user' title='Logout' onClick={logoutUser}>
-                <i className="fa fa-power-off" />
+                isLogged ?<div className='logout-user' title='Logout'>
+             
+                <h3 style={{
+                    marginLeft: '10px',
+                    fontSize: '30px'
+                }}>   <i className="fa fa-cog"/></h3>
             </div> : ''
             }
             

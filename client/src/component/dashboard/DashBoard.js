@@ -19,6 +19,7 @@ const DashBoard = () => {
     const [phieuthue] = context.phieuthueApi.phieuthue
     const [callback, setcallback] = context.phieuthueApi.callback
     const [callbackCus, setcallbackCus] = context.customerApi.callback
+    const [callbackDisk,setCallBackDisk]=context.diskApi.callback
     const [totaldisk, settotalDisk] = useState([])
     const [hanTra, setHanTra] = useState('')
     const [dia, setDia] = useState([])
@@ -43,6 +44,8 @@ const DashBoard = () => {
             status: ''
         }
     ])
+
+    const [_idDisk,setIdDisk]=useState([])
     const TotalItem = 5;
     const PostVisited = numberPage * TotalItem
     const[newThue,setNewThue]=useState({
@@ -120,8 +123,8 @@ const DashBoard = () => {
         setLoading(true)
         try {
 
-            const res = await axios.post('/phieuthue/add', { ...thongTin })
-
+           const res = await axios.post('/phieuthue/add', { ...thongTin })
+           await axios.patch('/disk/update_thue',{disk :_idDisk})
 
             if (isphitrem) {
                 setThemPhiTre({
@@ -147,6 +150,7 @@ const DashBoard = () => {
             setLoading(false)
           //  alert(res.data.msg)
           setIsNewThue(true)
+          setCallBackDisk(!callbackDisk)
             setcallback(!callback)
             setcallbackCus(!callbackCus)
             settotalDisk([])
@@ -226,7 +230,7 @@ const DashBoard = () => {
                     settotalDisk([...totaldisk, filterDisk._id])
                     setObId([...ObId, id])
                     setDia([...dia, ds])
-
+                    setIdDisk([..._idDisk,ds._id])
                 }
             });
 
@@ -274,18 +278,22 @@ const DashBoard = () => {
                     <td>{new Date(item.ngayLap).toLocaleDateString()}</td>
                     <td>{new Date(item.hanTra).toLocaleDateString()}</td>
                     <td>{item.total}</td>
-                    <td style={item.status.type ? { color: 'red' } : { color: 'green' }}>{item.status.msg}</td>
-                    <td onClick={() => handleView(item.id)}><GrView /></td>
+                    <td style={item.status.type ? { color: 'red',fontWeight: 'bold' } : { color: 'green',fontWeight: 'bold'  }}>{item.status.msg}</td>
+                    <td onClick={() => handleView(item.id)}><GrView style={{
+                      fontSize: '25px',
+                      
+                    }} /></td>
                     <td>
                         {
                             item.status.type ?
 
-                                <button style={{
+                                <button className='btn-disk' style={{
                                     borderRadius: '2px',
 
                                     margin: 'auto',
                                     display: 'flex',
-
+                                    background: 'none',
+                                    border: '1px solid #aaa',
 
                                     padding: '5px'
                                 }}
@@ -293,14 +301,16 @@ const DashBoard = () => {
                                 >Trả đĩa</button> :
 
 
-                                <button style={{
+                                <button className='btn-disk' style={{
                                     borderRadius: '2px',
 
                                     margin: 'auto',
                                     display: 'flex',
+                                    background: 'none',
+                                    border: '1px solid #aaa',
 
-
-                                    padding: '5px'
+                                    padding: '5px',
+                                
                                 }}
                                 
                                 onClick={()=>deletePhieuThue(item.id)}>Xóa phiếu</button>
@@ -318,10 +328,10 @@ const DashBoard = () => {
         setNumberPage(selected)
     }
     return (
-        <>
+        <div className='page-main'>
             <h4 style={{
                 textAlign: 'center',
-                background: '#ccc',
+                background: '#cccc',
                 letterSpacing: '1px',
                 textTransform: 'capitalize'
             }}>Phiếu thuê</h4>
@@ -366,8 +376,8 @@ const DashBoard = () => {
 
                 />
                 <div className='search'>
-                    <input placeholder='Id khách hàng' style={{ marginTop: '30px', width: '300px ' }} value={inputSearch} onChange={handleOnchangeInputSearch} />
-                    <button onClick={() => onClickSearch(inputSearch)} style={{ marginLeft: '10px' }}>Tìm</button>
+                    <input placeholder='Id khách hàng' style={{ marginTop: '30px', width: '300px ',border: '1px solid #aaa',outline: 'none' }} value={inputSearch} onChange={handleOnchangeInputSearch} />
+                    <button onClick={() => onClickSearch(inputSearch)} style={{ marginLeft: '10px',border: '1px solid #aaa',borderRadius: '3px',width: '70px' }}>Tìm</button>
                 </div>
               
             </div>
@@ -427,7 +437,7 @@ const DashBoard = () => {
             <h5>Ngày trả : {new Date(newThue.ngayTra).toLocaleDateString()}</h5>
             <button style={{width: '100%'}} onClick={()=>setIsNewThue(false)}>Hoàn tất</button>
         </div> : ''}
-        </>
+        </div>
     )
 }
 

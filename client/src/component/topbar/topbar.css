@@ -8,7 +8,7 @@
 }
 .topbar .logo-topbar{
     margin-left:50px;
-  
+    margin-top: 20px;
 }
 .topbar .logo-topbar a{
 
@@ -16,6 +16,7 @@
     color: royalblue;
     font-size:20px;
     text-transform: capitalize;
+    font-weight: bold;
 }
 .topbar .login-user{
     margin-right: 50px;
